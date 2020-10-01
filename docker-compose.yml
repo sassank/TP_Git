@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  database:
+    image: library/mariadb:10.5
+    environment:
+      - MYSQL_ROOT_PASSWORD=demo
+
+  phpmyadmin:
+    image: library/phpmyadmin:5.0-apache
+    depends_on:
+      - database
+    environment:
+      - PMA_HOST=database
+    ports:
+      - 8081:80
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: symfony
+    ports:
+    - 81:80
+    volumes:
+    - .:/app/
